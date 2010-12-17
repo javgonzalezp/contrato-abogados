@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.controls.Alert;		
+			public var textoOriginal:String = new String;
+			
+			public function cambio():void
+			{
+				var inicio:int;
+				var fin:int;
+				var flag1:Boolean;
+				var flag2:Boolean;
+				var substring:String;
+				var reemplazo:String;
+				var primero:String;
+				var segundo:String;
+				
+				for(var i:int; i<textoOriginal.length; i++){
+					if(textoOriginal.charAt(i) == "<"){
+						inicio = i;
+						flag1 = true;
+						//Alert.show(textoOriginal.charAt(i) + " " + i);
+					}
+					if(textoOriginal.charAt(i) == ">" && flag1){
+						fin = i+1;
+						flag2 = true;
+						substring = textoOriginal.substring(inicio,fin);
+						primero = textoOriginal.substr(0,inicio);
+						segundo = textoOriginal.substr(fin, textoOriginal.length);
+						switch(substring){
+							case "<FECHA>":
+								reemplazo = a.text;
+								textoOriginal = primero + reemplazo + segundo;
+								break;
+							case "<ABOGADO>":
+								reemplazo = d.text;
+								textoOriginal = primero + reemplazo + segundo;
+								break;
+						}
+					}
+				}
+				Alert.show(textoOriginal);
+			}
+			
+			public function init():void
+			{
+				textoOriginal = b.text;
+				c.text = textoOriginal;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:TextInput x="10" y="10" id="a"/>
+	<mx:RichTextEditor x="10" y="70" title="Title" text="Con fecha el día &lt;FECHA&gt; se hace el siguiente contrato, don &lt;ABOGADO&gt; estipula en el contrato lo siguiente:&#xa;" id="b">
+	</mx:RichTextEditor>
+	<mx:TextArea x="343" y="11" id="c" width="301" height="329"/>
+	<mx:Button x="178" y="10" label="Button" click="cambio()"/>
+	<mx:TextInput x="10" y="40" id="d"/>
+</mx:Application>
