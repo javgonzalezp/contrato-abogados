@@ -1,10 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()" currentState="contrato">
+	<mx:states>
+		<mx:State name="contrato">
+			<mx:AddChild position="lastChild">
+				<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:ns1="*" backgroundColor="#FFFFFF" xmlns:ns2="misClases.*">
+
+					<mx:Button label="Guardar" right="128" bottom="20" width="100" height="25" id="buttonAddCause" enabled="true"/>
+					<mx:Form cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" top="10" width="350" id="form33" right="11" bottom="89">
+					</mx:Form>
+					<mx:Form backgroundColor="#FFFFFF" id="form32" cornerRadius="5" borderStyle="solid" top="10" width="355" bottom="89" left="11">
+						<mx:FormItem label="Causa" width="100%" height="25">
+							<mx:TextInput width="200" editable="false" id="textDisplayIdCause"/>
+						</mx:FormItem>
+						<mx:FormItem label="Abogados" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="lawyerFullName"/>
+						</mx:FormItem>
+						<mx:FormItem label="Dirección Abogado" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="lawyerAddress"/>
+						</mx:FormItem>
+						<mx:FormItem label="Cliente" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="clientFullName"/>
+						</mx:FormItem>
+						<mx:FormItem label="Dirección Cliente" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="clientAddress"/>
+						</mx:FormItem>
+						<mx:FormItem label="Profesión" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="job"/>
+						</mx:FormItem>
+						<mx:FormItem label="Servicios" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="services"/>
+						</mx:FormItem>
+						<mx:FormItem label="Total Honorarios" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="totalHonorarium"/>
+						</mx:FormItem>
+						<mx:FormItem label="Número de coutas" width="100%" height="25">
+							<mx:TextInput width="200" editable="true" id="paymentNumber"/>
+						</mx:FormItem>
+						<mx:FormItem label="Forma de pago" width="100%" height="25">
+							<mx:ComboBox dataProvider="{formParameters}" id="paymentForm"></mx:ComboBox>
+						</mx:FormItem>
+						<mx:FormItem label="Fecha de pago" width="100%" height="25" id="paymentDate">
+							<mx:DateField width="100%"/>
+						</mx:FormItem>
+					</mx:Form>
+					<mx:FormItem label="Los campos marcados con * son obligatorios y deben rellenarse." color="#010000" bottom="30" left="10" id="formitem8">
+					</mx:FormItem>
+					<mx:Button label="Volver" width="100" height="25" id="button0" bottom="20" right="20"/>
+					<mx:Button x="431" y="504" label="Button" click="cambio()"/>
+					
+				</mx:Canvas>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
 	<mx:Script>
 		<![CDATA[
-			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.controls.Alert;		
+			import mx.collections.ArrayCollection;
+			
 			public var textoOriginal:String = new String;
+			private var formParameters:ArrayCollection = new ArrayCollection(["Seleccionar Parámetro","Efectivo","Cheque"]);
+
 			
 			public function cambio():void
 			{
@@ -13,7 +68,6 @@
 				var flag1:Boolean;
 				var flag2:Boolean;
 				var substring:String;
-				var reemplazo:String;
 				var primero:String;
 				var segundo:String;
 				
@@ -30,13 +84,39 @@
 						primero = textoOriginal.substr(0,inicio);
 						segundo = textoOriginal.substr(fin, textoOriginal.length);
 						switch(substring){
-							case "<FECHA>":
-								reemplazo = a.text;
-								textoOriginal = primero + reemplazo + segundo;
+							case "<FECHA DEL CONTRATO>":
+								textoOriginal = primero + "18/12/2010" + segundo;
+								break;
+							case "<DIRECCION ABOGADO>":
+								textoOriginal = primero + lawyerAddress.text.toString() + segundo;
+								break;
+							case "<CLIENTE>":
+								textoOriginal = primero + clientFullName.text.toString() + segundo;
+								break;
+							case "<DIRECCION CLIENTE>":
+								textoOriginal = primero + clientAddress.text.toString() + segundo;
+								break;
+							case "<PROFESION>":
+								textoOriginal = primero + job.text.toString() + segundo;
+								break;
+							case "<SERVICIOS>":
+								textoOriginal = primero + services.text.toString() + segundo;
+								break;
+							case "<TOTAL HONORARIOS>":
+								textoOriginal = primero + totalHonorarium.text.toString() + segundo;
+								break;
+							case "<FORMA DE PAGO>":
+								textoOriginal = primero + paymentForm.text.toString() + segundo;
+								break;
+							case "<CUOTA HONORARIOS>":
+								var numero:int = int(totalHonorarium.text)/int(paymentNumber.text);
+								textoOriginal = primero + numero + segundo; 
+								break;
+							case "<FECHA DE PAGO>":
+								textoOriginal = primero + "2010/12/31" + segundo;
 								break;
 							case "<ABOGADO>":
-								reemplazo = d.text;
-								textoOriginal = primero + reemplazo + segundo;
+								textoOriginal = primero + lawyerFullName.text.toString() + segundo;
 								break;
 						}
 					}
@@ -47,16 +127,10 @@
 			public function init():void
 			{
 				textoOriginal = b.text;
-				c.text = textoOriginal;
 			}
 			
 		]]>
 	</mx:Script>
-	
-	<mx:TextInput x="10" y="10" id="a"/>
-	<mx:RichTextEditor x="10" y="70" title="Title" text="Con fecha el día &lt;FECHA&gt; se hace el siguiente contrato, don &lt;ABOGADO&gt; estipula en el contrato lo siguiente:&#xa;" id="b">
+	<mx:RichTextEditor x="0" y="0" title="Title" text="Con fecha &lt;FECHA DEL CONTRATO&gt; se celebra contrato de honorarios profesionales entre el abogado &lt;ABOGADO&gt;, cedula nacional de identidad Nº9254266-1, domiciliado para estos efectos en &lt;DIRECCION ABOGADO&gt;, que en adelante denominaremos el profesional  y don o doña &lt;CLIENTE&gt;, cedula nacional de identidad &lt;RUT&gt;, &lt;PROFESION&gt; domiciliado para estos efectos en &lt;DIRECCION CLIENTE&gt;,  que en adelante denominaremos el cliente o la clienta:&#xa;PRIMERO: Los servicios profesionales consistirán en lo siguiente:&#xa;&lt;SERVICIOS&gt;&#xa;SEGUNDO: Los honorarios serán los siguientes:&#xa;Valor total &lt;TOTAL HONORARIOS&gt;&#xa;Pagaderos en &lt;FORMA DE PAGO&gt;,&#xa;*(Valor Cuota &lt;CUOTA HONORARIOS&gt;, fecha de pago &lt;FECHA PAGO&gt;, lo que se garantizara dela siguiente forma  " id="b" width="732" height="547">
 	</mx:RichTextEditor>
-	<mx:TextArea x="343" y="11" id="c" width="301" height="329"/>
-	<mx:Button x="178" y="10" label="Button" click="cambio()"/>
-	<mx:TextInput x="10" y="40" id="d"/>
 </mx:Application>
