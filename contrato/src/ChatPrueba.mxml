@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
-				xmlns:s="library://ns.adobe.com/flex/spark" applicationComplete="connect()" 
-			   	>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" applicationComplete="connect()">
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection; 
 			import flash.net.*;
-			
-			private const SERVER:String = "rtmfp://stratus.adobe.com/";
-			private const DEVKEY:String = "YOUR-STRATUS-DEVKEY";
+			import flash.events.*;
+			import flash.utils.*;
+			import mx.controls.*;
+			import mx.core.UIComponent;
+									
+			private const SERVER:String = "rtmfp://p2p.rtmfp.net/";
+			private const DEVKEY:String = "c4563db27753834c53fb2484-d63f32241b81";
 			
 			private var nc:NetConnection;
 			private var netGroup:NetGroup;
