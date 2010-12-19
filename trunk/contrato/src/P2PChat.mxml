@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<mx:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" applicationComplete="connect()">
-	<fx:Declarations>
+	<mx::Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
+	</mx:Declarations>
 	
-	<fx:Script>
+	<mx:Script>
 		<![CDATA[
 			private const SERVER:String = "rtmfp://stratus.adobe.com/";
 			private const DEVKEY:String = "YOUR-STRATUS-DEVKEY";
@@ -86,10 +86,10 @@
 
 
 		]]>
-	</fx:Script>
+	</mx:Script>
 	<s:TextArea left="10" right="10" top="10" bottom="40" id="txtHistory"/>
 	<s:TextInput x="10" id="txtUser" text="{user}" bottom="10"/>
 	<s:TextInput left="145" right="88" id="txtMessage" bottom="10" enter="sendMessage()"/>
 	<s:Button label="Send" click="sendMessage()" enabled="{connected}" bottom="10" right="10"/>
 	
-</s:Application>
+</mx:Application>
