@@ -71,7 +71,7 @@
 				message.text = txtMessage.text;
 				
 				
-				netGroup.post(message);
+				//netGroup.post(message);
 				receiveMessage(message);
 				
 				txtMessage.text = "";
